@@ -98,6 +98,7 @@ export const login = async (req, res) => {
             user,
             success: true
         })
+        
     } catch (error) {
         console.log(error);
     }

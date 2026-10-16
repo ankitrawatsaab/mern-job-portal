@@ -8,9 +8,6 @@
   import storage from "redux-persist/lib/storage";
   import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 
-  
-
-
   const rootReducer = combineReducers({
     auth: authSlice,
     job: jobSlice,

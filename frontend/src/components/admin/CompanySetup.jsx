@@ -94,7 +94,7 @@ const CompanySetup = () => {
                     </div>
                     <div className='grid grid-cols-2 gap-4'>
                         <div>
-                            <Label>Company Name</Label>
+                            <Label className="pb-2">Company Name</Label>
                             <Input
                                 type="text"
                                 name="name"
@@ -103,7 +103,7 @@ const CompanySetup = () => {
                             />
                         </div>
                         <div>
-                            <Label>Description</Label>
+                            <Label className="pb-2">Description</Label>
                             <Input
                                 type="text"
                                 name="description"
@@ -112,7 +112,7 @@ const CompanySetup = () => {
                             />
                         </div>
                         <div>
-                            <Label>Website</Label>
+                            <Label className="pb-2">Website</Label>
                             <Input
                                 type="text"
                                 name="website"
@@ -121,7 +121,7 @@ const CompanySetup = () => {
                             />
                         </div>
                         <div>
-                            <Label>Location</Label>
+                            <Label className="pb-2">Location</Label>
                             <Input
                                 type="text"
                                 name="location"
@@ -130,7 +130,7 @@ const CompanySetup = () => {
                             />
                         </div>
                         <div>
-                            <Label>Logo</Label>
+                            <Label className="pb-2">Logo</Label>
                             <Input
                                 type="file"
                                 accept="image/*"

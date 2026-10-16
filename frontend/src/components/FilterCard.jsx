@@ -11,11 +11,7 @@ const filterData = [
     },
     {
         filterType : "Industry",
-        array : ["Software Support","Software Developer","Customer Support"]
-    },
-    {
-        filterType : "Salary",
-        array : ["0-3 LPA","3-6 LPA","6-10 LPA","10+ LPA"]
+        array : ["Software Engineer","Frontend Developer","Backend Developer","UI/UX Designer"," DevOps Engineer", "Data Analyst","AI Engineer", "Cybersecurity Specialist","Cloud Engineer","Android Developer", "Cloud Engineer"]
     }
 ]
 

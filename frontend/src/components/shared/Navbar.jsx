@@ -1,4 +1,8 @@
-import { PopoverContent, Popover, PopoverTrigger } from '@radix-ui/react-popover'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../ui/button'
@@ -32,13 +36,17 @@ const Navbar = () => {
     }
     return (
         <>
-            <div className='flex justify-between items-center mx-auto max-w-7xl p-5'>
-                <div className='bg-white'>
-                    <h1 className='text-2xl font-bold'> Career<span className='text-[#6A38C2]'>Verse</span></h1>
-                </div>
+            <div className="max-w-7xl mx-auto px-5 py-4 flex flex-wrap items-center justify-between gap-4">
+                <Link to="/" className="inline-block">
+                    <div className="bg-white">
+                        <h1 className="text-2xl font-bold">
+                            Career<span className="text-[#6A38C2]">Verse</span>
+                        </h1>
+                    </div>
+                </Link>
 
                 <div className='flex gap-2 items-center'>
-                    <ul className='flex gap-5 font-medium items-center'>
+                    <ul className='flex flex-wrap items-center gap-5 font-medium'>
                         {
                             user && user.role == 'recruiter' ? (
                                 <>
@@ -85,7 +93,7 @@ const Navbar = () => {
 
                                         <div className='flex flex-col my-2 text-gray-600'>
                                             {
-                                                user && user.role =='student' && (
+                                                user && user.role == 'student' && (
                                                     <div className='flex gap-2 cursor-pointer items-center'>
                                                         <User2 />
                                                         <Button variant="link"> <Link to="/profile">View Profile</Link></Button>
