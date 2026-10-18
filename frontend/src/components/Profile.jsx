@@ -15,6 +15,7 @@ import AppliedJobTable from "./AppliedJobTable";
 import UpdateProfileDialog from "./UpdateProfileDialog";
 import { useSelector } from "react-redux";
 import useGetAppliedJobs from "@/hooks/useGetAppliedJobs";
+import Footer from "./shared/Footer";
 
 const Profile = () => {
   useGetAppliedJobs();
@@ -150,6 +151,8 @@ const Profile = () => {
         open={open}
         setOpen={setOpen}
       />
+
+      <Footer/>
     </div>
   );
 };
