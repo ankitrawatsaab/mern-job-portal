@@ -1,54 +1,125 @@
-import React from 'react'
+
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { setSearchedQuery } from '@/redux/jobSlice';
+import { Search, ArrowRight } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setSearchedQuery } from "@/redux/jobSlice";
 
 const HeroSection = () => {
-    const [query, setQuery] = useState("");
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const searchJobHandler = () => {
-        dispatch(setSearchedQuery(query));
-        navigate("/browse")
+  const [query, setQuery] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const searchJobHandler = (e) => {
+    e?.preventDefault();
+
+    const trimmedQuery = query.trim();
+
+    if (!trimmedQuery) {
+      setQuery("");
+      return;
     }
-    return (
-        <>
-            <div className='text-center'>
-                <div className='flex flex-col gap-5 my-10'>
-                    <span className='mx-auto px-4 py-2 rounded-full bg-gray-200 text-[#6A38C2] font-medium '>No. 1 Job Hunt Web Site</span>
-                    <div>
-                        <h1 className='text-5xl font-bold'>Search, Apply </h1>
-                        <h1 className='text-5xl font-bold'>Get Your <span className='text-violet-900'>Dream Jobs</span></h1>
-                    </div>
-                    <p className='font-bold text-2xl text-black-600'>“Your Career Starts Here.”</p>
 
-                    <div className="flex w-full max-w-xl mx-auto">
-                        <Input type="text" 
-                        className="rounded-l-full text-gray-400 shadow-[0_4px_8px_0_rgba(0,0,0,0.10)]" placeholder="Find your dream jobs"
-                        onChange={(e)=>setQuery(e.target.value)}
-                        />
+    dispatch(setSearchedQuery(trimmedQuery));
+    navigate("/browse");
+  };
 
-                        <Button type="submit"
-                        className="rounded-r-full bg-violet-700 hover:bg-violet-900 text-white px-5"
-                        onClick={searchJobHandler}
+  const categories = [
+    "Software Engineer",
+    "Frontend Developer",
+    "Backend Developer",
+  ];
 
-                        >
-                        <Search size={20} />
-                        </Button>
-                    </div>
-                
+  const handleCategoryClick = (category) => {
+    setQuery(category);
+    dispatch(setSearchedQuery(category));
+    navigate("/browse");
+  };
 
-                </div>
+  return (
+    <section className="relative overflow-hidden bg-gradient-to-b from-white via-white to-purple-50/50 px-4 pb-16 pt-12 sm:pb-20 sm:pt-16 lg:pt-20">
+      {/* Subtle background accents */}
+      <div className="pointer-events-none absolute left-1/2 top-10 h-64 w-64 -translate-x-1/2 rounded-full bg-purple-200/20 blur-3xl" />
 
+      <div className="relative mx-auto max-w-4xl text-center">
+        <span className="inline-flex items-center gap-2 rounded-full border border-purple-100 bg-white px-4 py-2 text-sm font-semibold text-purple-700 shadow-sm sm:text-base">
+          <span className="h-2 w-2 rounded-full bg-purple-600" />
+          Find your next opportunity
+        </span>
 
+        <h1 className="mx-auto mt-7 max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-gray-950 sm:text-5xl lg:text-6xl">
+          Search, Apply
+          <br />
+          Get Your{" "}
+          <span className="bg-gradient-to-r from-purple-700 to-violet-500 bg-clip-text text-transparent">
+            Dream Jobs
+          </span>
+        </h1>
 
-            </div>
-        </>
-    )
-}
+        <p className="mt-5 text-base font-medium text-gray-600 sm:text-lg">
+          Your career starts here. Find work that moves you forward.
+        </p>
 
-export default HeroSection
+        {/* Search form */}
+        <form
+          onSubmit={searchJobHandler}
+          className="mx-auto mt-8 flex w-full max-w-2xl items-center gap-2 rounded-2xl border border-gray-200 bg-white p-1.5 shadow-lg shadow-purple-900/5 transition-all focus-within:border-purple-300 focus-within:ring-4 focus-within:ring-purple-100 sm:rounded-full"
+        >
+          <Search
+            size={21}
+            className="ml-3 shrink-0 text-gray-400"
+          />
+
+          <Input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="h-11 border-0 bg-transparent text-gray-900 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            placeholder="Search by job title or keyword..."
+            aria-label="Search jobs by title or keyword"
+          />
+
+          <Button
+            type="submit"
+            className="h-11 shrink-0 rounded-xl bg-purple-700 px-4 font-semibold text-white transition-colors hover:bg-purple-800 sm:rounded-full sm:px-6"
+          >
+            <span className="hidden sm:inline">Search Jobs</span>
+            <Search size={18} className="sm:ml-2" />
+          </Button>
+        </form>
+
+        <p className="mt-3 text-xs text-gray-500 sm:text-sm">
+          Try searching for a role that matches your skills.
+        </p>
+
+        {/* Popular searches */}
+        <div className="mt-10">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
+            Popular searches
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {categories.map((category) => (
+              <button
+                key={category}
+                type="button"
+                onClick={() => handleCategoryClick(category)}
+                className="group inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-purple-200 hover:bg-purple-50 hover:text-purple-700 hover:shadow-md sm:px-5"
+              >
+                {category}
+                <ArrowRight
+                  size={14}
+                  className="text-gray-400 transition-transform group-hover:translate-x-0.5 group-hover:text-purple-600"
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default HeroSection;
