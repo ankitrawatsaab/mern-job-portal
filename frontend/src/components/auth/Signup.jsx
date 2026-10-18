@@ -101,7 +101,7 @@ const Signup = () => {
     <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50">
       <Navbar />
 
-      <main className="mx-auto flex min-h-[calc(100vh-70px)] max-w-7xl items-center justify-center px-4 py-10 sm:px-6">
+      <main className="mx-auto flex min-h-[calc(100vh-70px)] max-w-7xl items-center justify-center px-4 py-4 sm:px-6 lg:py-6">
         <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-violet-100 bg-white shadow-xl shadow-violet-100/50 lg:grid-cols-2">
           {/* Left section */}
           <div className="relative hidden flex-col justify-between overflow-hidden bg-gradient-to-br from-violet-700 via-purple-700 to-indigo-800 p-10 text-white lg:flex">
@@ -154,7 +154,7 @@ const Signup = () => {
           </div>
 
           {/* Signup form */}
-          <div className="p-6 sm:p-9 lg:p-10">
+          <div className="p-5 sm:p-7 lg:p-8">
             <div className="mb-8">
               <div className="mb-4 inline-flex rounded-2xl bg-violet-100 p-3 text-violet-700 lg:hidden">
                 <BriefcaseBusiness size={27} />
@@ -173,7 +173,7 @@ const Signup = () => {
               </p>
             </div>
 
-            <form onSubmit={submitHandler} className="space-y-5">
+            <form onSubmit={submitHandler} className="space-y-3">
               {/* Full name */}
               <div className="space-y-2">
                 <Label htmlFor="fullname" className="font-medium text-gray-700">
