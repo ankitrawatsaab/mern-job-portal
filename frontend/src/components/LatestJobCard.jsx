@@ -9,9 +9,11 @@ const LatestJobCard = ({ job }) => {
   const navigate = useNavigate();
 
   const companyName = job?.company?.name || "Company";
+  const companyLogo = job?.company?.logo;
   const positionCount = Number(job?.position);
   const description =
-    job?.description || "Explore this opportunity and learn more about the role.";
+    job?.description ||
+    "Explore this opportunity and learn more about the role.";
   const salary = job?.salary;
 
   const openJob = () => {
@@ -32,12 +34,25 @@ const LatestJobCard = ({ job }) => {
       role="link"
       tabIndex={0}
       aria-label={`View details for ${job?.title || "job opening"}`}
-      className="group flex h-full min-h-[330px] cursor-pointer flex-col rounded-2xl border border-gray-200/80 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-purple-200 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 sm:p-6"
+      className="group flex h-full min-h-[320px] cursor-pointer flex-col rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-purple-200 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 sm:p-6"
     >
       {/* Company */}
       <div className="flex items-center gap-3">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-purple-100 bg-gradient-to-br from-purple-50 to-indigo-50 text-lg font-bold text-purple-700 transition-colors group-hover:border-purple-200">
-          {companyName.charAt(0).toUpperCase()}
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white p-2">
+          {companyLogo ? (
+            <img
+              src={companyLogo}
+              alt={`${companyName} logo`}
+              className="h-full w-full object-contain"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          ) : (
+            <span className="text-xl font-bold text-purple-700">
+              {companyName.charAt(0).toUpperCase()}
+            </span>
+          )}
         </div>
 
         <div className="min-w-0 flex-1">
@@ -58,18 +73,18 @@ const LatestJobCard = ({ job }) => {
       </div>
 
       {/* Job details */}
-      <div className="mt-6 flex-1">
+      <div className="mt-5 flex-1">
         <h2 className="line-clamp-2 text-lg font-bold leading-7 text-gray-900 transition-colors group-hover:text-purple-700">
           {job?.title || "Job opening"}
         </h2>
 
-        <p className="mt-3 overflow-hidden text-sm leading-6 text-gray-600 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
+        <p className="mt-2 overflow-hidden text-sm leading-6 text-gray-600 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
           {description}
         </p>
       </div>
 
       {/* Job badges */}
-      <div className="mt-5 flex flex-wrap gap-2">
+      <div className="mt-4 flex flex-wrap gap-2">
         <Badge
           variant="outline"
           className="rounded-full border-blue-200 bg-blue-50 px-3 py-1 font-medium text-blue-700"
