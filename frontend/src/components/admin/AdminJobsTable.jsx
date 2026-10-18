@@ -1,64 +1,192 @@
+
 import React, { useEffect, useState } from 'react'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { Edit2, Eye, MoreHorizontal } from 'lucide-react'
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '../ui/table'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '../ui/popover'
+import {
+    Edit2,
+    Eye,
+    MoreHorizontal,
+    BriefcaseBusiness,
+    Building2,
+    CalendarDays,
+    FileSearch,
+} from 'lucide-react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-
 const AdminJobsTable = () => {
-    const navigate = useNavigate();
-    const { allAdminJobs,searchJobByText } = useSelector((state) => state.job);
-    const [filterJobs, setFilterJobs] = useState(allAdminJobs );
+    const navigate = useNavigate()
 
-    useEffect(()=>{
-        const filterJobs = allAdminJobs.length>=0 && allAdminJobs.filter((job)=>{
-            if(!searchJobByText){
-                return true;
-            };
-            return job?.company?.name?.toLowerCase().includes(searchJobByText.toLowerCase()) ||
-                   job?.title?.toLowerCase().includes(searchJobByText.toLowerCase());
-        });
-        setFilterJobs(filterJobs);
-    },[allAdminJobs,searchJobByText])
+    const { allAdminJobs, searchJobByText } = useSelector(
+        (state) => state.job
+    )
+
+    const [filterJobs, setFilterJobs] = useState(allAdminJobs || [])
+
+    useEffect(() => {
+        const jobs = (allAdminJobs || []).filter((job) => {
+            if (!searchJobByText?.trim()) return true
+
+            const search = searchJobByText.toLowerCase().trim()
+
+            return (
+                job?.company?.name?.toLowerCase().includes(search) ||
+                job?.title?.toLowerCase().includes(search)
+            )
+        })
+
+        setFilterJobs(jobs)
+    }, [allAdminJobs, searchJobByText])
+
+    const formatDate = (date) => {
+        if (!date) return '—'
+
+        const parsedDate = new Date(date)
+
+        if (Number.isNaN(parsedDate.getTime())) return '—'
+
+        return parsedDate.toLocaleDateString('en-IN', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+        })
+    }
+
     return (
-        <div>
+        <div className="w-full">
             <Table>
-                <TableCaption>List of your recent post jobs</TableCaption>
+                <TableCaption className="py-4 text-sm text-gray-500">
+                    Showing {filterJobs.length} of {(allAdminJobs || []).length} job postings
+                </TableCaption>
+
                 <TableHeader>
-                    <TableRow>
-                        <TableHead>Company Name</TableHead>
-                        <TableHead>Role</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
+                    <TableRow className="border-gray-100 bg-gray-50/80 hover:bg-gray-50/80">
+                        <TableHead className="h-12 pl-5 text-xs font-semibold uppercase tracking-wider text-gray-500">
+                            Company
+                        </TableHead>
+                        <TableHead className="h-12 text-xs font-semibold uppercase tracking-wider text-gray-500">
+                            Job Role
+                        </TableHead>
+                        <TableHead className="h-12 text-xs font-semibold uppercase tracking-wider text-gray-500">
+                            Posted Date
+                        </TableHead>
+                        <TableHead className="h-12 pr-5 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                            Actions
+                        </TableHead>
                     </TableRow>
                 </TableHeader>
 
                 <TableBody>
-                    {
-                        filterJobs?.map((job) => (
-                            <tr key={job._id}>
-                                <TableCell>{job?.company?.name}</TableCell>
-                                <TableCell>{job?.title}</TableCell>
-                                <TableCell>{job?.createdAt.split("T")[0]}</TableCell>
-                                <TableCell className="text-right cursor-pointer">
+                    {filterJobs.length > 0 ? (
+                        filterJobs.map((job) => (
+                            <TableRow
+                                key={job._id}
+                                className="border-gray-100 transition-colors hover:bg-purple-50/40"
+                            >
+                                <TableCell className="py-4 pl-5">
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-purple-100 bg-purple-50">
+                                            <Building2 className="h-5 w-5 text-purple-600" />
+                                        </div>
+
+                                        <div className="min-w-0">
+                                            <p className="max-w-[200px] truncate font-semibold text-gray-900">
+                                                {job?.company?.name || 'Unknown Company'}
+                                            </p>
+                                            <p className="mt-1 text-xs text-gray-500">
+                                                Company
+                                            </p>
+                                        </div>
+                                    </div>
+                                </TableCell>
+
+                                <TableCell className="py-4">
+                                    <div className="flex items-center gap-2">
+                                        <BriefcaseBusiness className="h-4 w-4 shrink-0 text-gray-400" />
+                                        <span className="font-medium text-gray-700">
+                                            {job?.title || 'Untitled Role'}
+                                        </span>
+                                    </div>
+                                </TableCell>
+
+                                <TableCell className="py-4">
+                                    <div className="flex items-center gap-2 whitespace-nowrap text-sm text-gray-600">
+                                        <CalendarDays className="h-4 w-4 text-gray-400" />
+                                        {formatDate(job?.createdAt)}
+                                    </div>
+                                </TableCell>
+
+                                <TableCell className="py-4 pr-5 text-right">
                                     <Popover>
-                                        <PopoverTrigger> <MoreHorizontal /> </PopoverTrigger>
-                                        <PopoverContent className='w-32'>
-                                            <div onClick={()=> navigate(`/admin/companies/${job._id}`)}  className='flex items-center gap-2 w-fit cursor-pointer'>
-                                                <Edit2 className='w-4' />
-                                                <span>Edit</span>
-                                            </div>
-                                            <div onClick={()=> navigate(`/admin/jobs/${job._id}/applicants`)}  className='flex items-center gap-2 w-fit cursor-pointer mt-2'>
-                                                <Eye className='w-4' />
-                                                <span>Applicant</span>
-                                            </div>
+                                        <PopoverTrigger asChild>
+                                            <button
+                                                type="button"
+                                                aria-label={`Actions for ${job?.title || 'job'}`}
+                                                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-transparent text-gray-500 transition hover:border-gray-200 hover:bg-white hover:text-purple-700"
+                                            >
+                                                <MoreHorizontal className="h-5 w-5" />
+                                            </button>
+                                        </PopoverTrigger>
+
+                                        <PopoverContent align="end" className="w-44 rounded-xl p-2">
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    navigate(`/admin/companies/${job._id}`)
+                                                }
+                                                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-gray-700 transition hover:bg-purple-50 hover:text-purple-700"
+                                            >
+                                                <Edit2 className="h-4 w-4" />
+                                                Edit Job
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    navigate(`/admin/jobs/${job._id}/applicants`)
+                                                }
+                                                className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-gray-700 transition hover:bg-purple-50 hover:text-purple-700"
+                                            >
+                                                <Eye className="h-4 w-4" />
+                                                View Applicants
+                                            </button>
                                         </PopoverContent>
                                     </Popover>
                                 </TableCell>
-                            </tr>
+                            </TableRow>
                         ))
-                    }
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={4} className="h-52">
+                                <div className="flex flex-col items-center justify-center gap-3 text-center">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+                                        <FileSearch className="h-6 w-6 text-gray-400" />
+                                    </div>
+
+                                    <div>
+                                        <p className="font-semibold text-gray-800">
+                                            No jobs found
+                                        </p>
+                                        <p className="mt-1 text-sm text-gray-500">
+                                            Try another search or create a new job posting.
+                                        </p>
+                                    </div>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    )}
                 </TableBody>
             </Table>
         </div>
