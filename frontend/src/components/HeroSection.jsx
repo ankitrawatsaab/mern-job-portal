@@ -27,9 +27,9 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-white to-purple-50/50 px-4 pb-16 pt-12 sm:pb-20 sm:pt-16 lg:pt-20">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#F5EEFF] via-[#FCFAFF] to-[#F8FAFC] px-4 pb-16 pt-12 sm:pb-20 sm:pt-16 lg:pt-20">
       {/* Subtle background accents */}
-      <div className="pointer-events-none absolute left-1/2 top-10 h-64 w-64 -translate-x-1/2 rounded-full bg-purple-200/20 blur-3xl" />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-80 w-[700px] max-w-full -translate-x-1/2 rounded-full bg-purple-300/25 blur-[100px]" />
 
       <div className="relative mx-auto max-w-4xl text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-purple-100 bg-white px-4 py-2 text-sm font-semibold text-purple-700 shadow-sm sm:text-base">
