@@ -19,7 +19,6 @@ import {
     Eye,
     MoreHorizontal,
     BriefcaseBusiness,
-    Building2,
     CalendarDays,
     FileSearch,
 } from 'lucide-react'
@@ -97,8 +96,19 @@ const AdminJobsTable = () => {
                             >
                                 <TableCell className="py-4 pl-5">
                                     <div className="flex items-center gap-3">
-                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-purple-100 bg-purple-50">
-                                            <Building2 className="h-5 w-5 text-purple-600" />
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white">
+                                            {job?.company?.logo ? (
+                                                <img
+                                                    src={job.company.logo}
+                                                    alt={`${job?.company?.name || 'Company'} logo`}
+                                                    className="h-full w-full object-contain p-1"
+                                                    onError={(e) => {
+                                                        e.currentTarget.style.display = 'none'
+                                                    }}
+                                                />
+                                            ) : (
+                                                <BriefcaseBusiness className="h-5 w-5 text-purple-600" />
+                                            )}
                                         </div>
 
                                         <div className="min-w-0">
