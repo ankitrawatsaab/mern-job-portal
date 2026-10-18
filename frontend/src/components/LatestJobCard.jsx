@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "./ui/button";
@@ -11,9 +10,7 @@ const LatestJobCard = ({ job }) => {
   const companyName = job?.company?.name || "Company";
   const companyLogo = job?.company?.logo;
   const positionCount = Number(job?.position);
-  const description =
-    job?.description ||
-    "Explore this opportunity and learn more about the role.";
+  const description = job?.description ||"Explore this opportunity and learn more about the role.";
   const salary = job?.salary;
 
   const openJob = () => {
@@ -34,7 +31,7 @@ const LatestJobCard = ({ job }) => {
       role="link"
       tabIndex={0}
       aria-label={`View details for ${job?.title || "job opening"}`}
-      className="group flex h-full min-h-[320px] cursor-pointer flex-col rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-purple-200 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 sm:p-6"
+      className="group flex h-full min-h-[330px] cursor-pointer flex-col rounded-2xl border border-gray-200/80 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-purple-200 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 sm:p-6"
     >
       {/* Company */}
       <div className="flex items-center gap-3">
