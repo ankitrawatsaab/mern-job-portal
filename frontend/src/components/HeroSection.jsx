@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, ArrowRight } from "lucide-react";
+import { Search } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSearchedQuery } from "@/redux/jobSlice";
@@ -23,18 +23,6 @@ const HeroSection = () => {
     }
 
     dispatch(setSearchedQuery(trimmedQuery));
-    navigate("/browse");
-  };
-
-  const categories = [
-    "Software Engineer",
-    "Frontend Developer",
-    "Backend Developer",
-  ];
-
-  const handleCategoryClick = (category) => {
-    setQuery(category);
-    dispatch(setSearchedQuery(category));
     navigate("/browse");
   };
 
@@ -93,30 +81,6 @@ const HeroSection = () => {
         <p className="mt-3 text-xs text-gray-500 sm:text-sm">
           Try searching for a role that matches your skills.
         </p>
-
-        {/* Popular searches */}
-        <div className="mt-10">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
-            Popular searches
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {categories.map((category) => (
-              <button
-                key={category}
-                type="button"
-                onClick={() => handleCategoryClick(category)}
-                className="group inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-purple-200 hover:bg-purple-50 hover:text-purple-700 hover:shadow-md sm:px-5"
-              >
-                {category}
-                <ArrowRight
-                  size={14}
-                  className="text-gray-400 transition-transform group-hover:translate-x-0.5 group-hover:text-purple-600"
-                />
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );
