@@ -101,7 +101,7 @@ const Login = () => {
                         </h1>
 
                         <p className="mt-2 text-sm text-slate-500 sm:text-base">
-                            Sign in to continue your career journey.
+                            Login to continue your career journey.
                         </p>
                     </div>
 
