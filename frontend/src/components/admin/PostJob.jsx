@@ -244,8 +244,46 @@ const PostJob = () => {
 
                             <div className="grid grid-cols-1 gap-x-6 gap-y-5 md:grid-cols-2">
                                 <div>
-                                    <Label htmlFor="experienceLevel">Experience Level</Label>
+                                    <Label htmlFor="jobType">
+                                        Job Type
+                                    </Label>
+                                    <Select
+                                        value={input.jobType}
+                                        onValueChange={(value) =>
+                                            setInput((prev) => ({
+                                                ...prev,
+                                                jobType: value,
+                                            }))
+                                        }
+                                        required
+                                    >
+                                        <SelectTrigger className={fieldClass}>
+                                            <SelectValue placeholder="Select job type" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectItem value="Full-time">
+                                                    Full-time
+                                                </SelectItem>
+                                                <SelectItem value="Part-time">
+                                                    Part-time
+                                                </SelectItem>
+                                                <SelectItem value="Internship">
+                                                    Internship
+                                                </SelectItem>
+                                                <SelectItem value="Contract">
+                                                    Contract
+                                                </SelectItem>
+                                                <SelectItem value="Remote">
+                                                    Remote
+                                                </SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
 
+                                <div>
+                                    <Label htmlFor="experienceLevel">Experience Level</Label>
                                     <Select
                                     value={input.experienceLevel}
                                     onValueChange={(value) =>
@@ -264,45 +302,6 @@ const PostJob = () => {
                                         <SelectItem value="4">4 Years</SelectItem>
                                         <SelectItem value="5">5 Years</SelectItem>
                                     </SelectContent>
-                                    </Select>
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="experience">
-                                        Experience Level
-                                    </Label>
-                                    <Select
-                                        value={input.experience}
-                                        onValueChange={(value) =>
-                                            setInput((prev) => ({
-                                                ...prev,
-                                                experience: value,
-                                            }))
-                                        }
-                                        required
-                                    >
-                                        <SelectTrigger className={fieldClass}>
-                                            <SelectValue placeholder="Select experience level" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectItem value="Fresher">
-                                                    Fresher
-                                                </SelectItem>
-                                                <SelectItem value="Entry Level">
-                                                    Entry Level
-                                                </SelectItem>
-                                                <SelectItem value="1-3 Years">
-                                                    1–3 Years
-                                                </SelectItem>
-                                                <SelectItem value="3-5 Years">
-                                                    3–5 Years
-                                                </SelectItem>
-                                                <SelectItem value="5+ Years">
-                                                    5+ Years
-                                                </SelectItem>
-                                            </SelectGroup>
-                                        </SelectContent>
                                     </Select>
                                 </div>
 
