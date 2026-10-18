@@ -1,9 +1,9 @@
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
-import { useDispatch } from 'react-redux'
-import { setSearchedQuery } from '@/redux/jobSlice'
+import { Button } from '@/components/ui/button'
+import { SlidersHorizontal, X } from 'lucide-react'
 
 const filterData = [
   {
@@ -27,99 +27,84 @@ const filterData = [
   },
 ]
 
-const FilterCard = () => {
-  const [selectedValue, setSelectedValue] = useState('')
-  const dispatch = useDispatch()
-
-  const handleValueChange = (value) => {
-    setSelectedValue(value)
-  }
-
-  useEffect(() => {
-    dispatch(setSearchedQuery(selectedValue))
-  }, [selectedValue, dispatch])
-
+const FilterCard = ({ filters, onFilterChange, onClear, onClose }) => {
   return (
     <aside className="w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900">
-            Filter Jobs
-          </h2>
-          <p className="mt-1 text-sm text-slate-500">
-            Find the right opportunity
-          </p>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50 text-purple-700">
+            <SlidersHorizontal size={19} />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-slate-900">Filter Jobs</h2>
+            <p className="text-xs text-slate-500">Find your next opportunity</p>
+          </div>
         </div>
 
-        {selectedValue && (
-          <button
-            type="button"
-            onClick={() => setSelectedValue('')}
-            className="rounded-lg px-2 py-1 text-sm font-semibold text-purple-600 transition hover:bg-purple-50"
-          >
-            Clear all
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close filters"
+          className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 lg:hidden"
+        >
+          <X size={20} />
+        </button>
       </div>
 
       <div className="my-5 h-px bg-slate-100" />
 
-      <RadioGroup
-        value={selectedValue}
-        onValueChange={handleValueChange}
-        className="space-y-6"
-      >
-        {filterData.map((data) => (
-          <section key={data.filterType}>
-            <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-slate-700">
-              {data.filterType}
-            </h3>
+      {filterData.map(({ filterType, array }) => (
+        <section key={filterType} className="mb-6 last:mb-0">
+          <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">
+            {filterType}
+          </h3>
 
-            <div className="space-y-1">
-              {data.array.map((item) => {
-                const itemId = `${data.filterType}-${item}`
-                  .replace(/[^a-zA-Z0-9-]/g, '-')
+          <RadioGroup
+            value={filters[filterType] || ''}
+            onValueChange={(value) => onFilterChange(filterType, value)}
+            className="space-y-1"
+          >
+            {array.map((item) => {
+              const id = `${filterType}-${item}`.replace(/[^a-zA-Z0-9-]/g, '-')
+              const selected = filters[filterType] === item
 
-                const isSelected = selectedValue === item
-
-                return (
-                  <div
-                    key={item}
-                    className={`flex items-center gap-3 rounded-xl px-3 py-2 transition-colors ${
-                      isSelected
-                        ? 'bg-purple-50'
-                        : 'hover:bg-slate-50'
+              return (
+                <div
+                  key={item}
+                  className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors ${
+                    selected ? 'bg-purple-50' : 'hover:bg-slate-50'
+                  }`}
+                >
+                  <RadioGroupItem
+                    id={id}
+                    value={item}
+                    className="border-slate-300 text-purple-600"
+                  />
+                  <Label
+                    htmlFor={id}
+                    className={`flex-1 cursor-pointer text-sm ${
+                      selected
+                        ? 'font-semibold text-purple-700'
+                        : 'font-medium text-slate-700'
                     }`}
                   >
-                    <RadioGroupItem
-                      id={itemId}
-                      value={item}
-                      className="border-slate-300 text-purple-600"
-                    />
+                    {item}
+                  </Label>
+                </div>
+              )
+            })}
+          </RadioGroup>
+        </section>
+      ))}
 
-                    <Label
-                      htmlFor={itemId}
-                      className={`flex-1 cursor-pointer text-sm ${
-                        isSelected
-                          ? 'font-semibold text-purple-700'
-                          : 'font-medium text-slate-700'
-                      }`}
-                    >
-                      {item}
-                    </Label>
-                  </div>
-                )
-              })}
-            </div>
-          </section>
-        ))}
-      </RadioGroup>
-
-      <div className="mt-6 rounded-xl bg-slate-50 p-3">
-        <p className="text-xs leading-5 text-slate-500">
-          Select a location or role to narrow down your job search.
-        </p>
-      </div>
+      <Button
+        type="button"
+        variant="outline"
+        onClick={onClear}
+        className="mt-5 w-full rounded-xl border-slate-200 font-semibold hover:border-purple-200 hover:bg-purple-50 hover:text-purple-700"
+      >
+        Clear all filters
+      </Button>
     </aside>
   )
 }
