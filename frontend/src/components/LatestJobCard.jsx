@@ -9,67 +9,111 @@ const LatestJobCard = ({ job }) => {
   const navigate = useNavigate();
 
   const companyName = job?.company?.name || "Company";
+  const positionCount = Number(job?.position);
+  const description =
+    job?.description || "Explore this opportunity and learn more about the role.";
+  const salary = job?.salary;
+
+  const openJob = () => {
+    if (job?._id) {
+      navigate(`/description/${job._id}`);
+    }
+  };
 
   return (
-    <div
-      onClick={() => navigate(`/description/${job?._id}`)}
-      className="group flex h-full min-h-[320px] flex-col rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-purple-200 hover:shadow-lg cursor-pointer"
+    <article
+      onClick={openJob}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openJob();
+        }
+      }}
+      role="link"
+      tabIndex={0}
+      aria-label={`View details for ${job?.title || "job opening"}`}
+      className="group flex h-full min-h-[330px] cursor-pointer flex-col rounded-2xl border border-gray-200/80 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-purple-200 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 sm:p-6"
     >
+      {/* Company */}
       <div className="flex items-center gap-3">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-purple-50 text-lg font-bold text-purple-700">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-purple-100 bg-gradient-to-br from-purple-50 to-indigo-50 text-lg font-bold text-purple-700 transition-colors group-hover:border-purple-200">
           {companyName.charAt(0).toUpperCase()}
         </div>
 
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h3 className="truncate font-semibold text-gray-900">
             {companyName}
           </h3>
-          <p className="mt-1 flex items-center gap-1 text-sm text-gray-500">
-            <MapPin size={14} />
-            India
+
+          <p className="mt-1 flex items-center gap-1.5 text-sm text-gray-500">
+            <MapPin size={14} className="shrink-0" />
+            <span>India</span>
           </p>
         </div>
+
+        <ArrowUpRight
+          size={18}
+          className="shrink-0 text-gray-400 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-purple-600"
+        />
       </div>
 
+      {/* Job details */}
       <div className="mt-6 flex-1">
-        <h2 className="text-lg font-bold text-gray-900 group-hover:text-purple-700">
-          {job?.title}
+        <h2 className="line-clamp-2 text-lg font-bold leading-7 text-gray-900 transition-colors group-hover:text-purple-700">
+          {job?.title || "Job opening"}
         </h2>
 
         <p className="mt-3 overflow-hidden text-sm leading-6 text-gray-600 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
-          {job?.description}
+          {description}
         </p>
       </div>
 
+      {/* Job badges */}
       <div className="mt-5 flex flex-wrap gap-2">
-        <Badge variant="outline" className="border-blue-200 bg-blue-50 text-blue-700">
-          {job?.position} Positions
+        <Badge
+          variant="outline"
+          className="rounded-full border-blue-200 bg-blue-50 px-3 py-1 font-medium text-blue-700"
+        >
+          {Number.isFinite(positionCount) && positionCount > 0
+            ? `${positionCount} Position${positionCount === 1 ? "" : "s"}`
+            : "Open Position"}
         </Badge>
 
-        <Badge variant="outline" className="border-red-200 bg-red-50 text-red-700">
-          {job?.jobType}
-        </Badge>
+        {job?.jobType && (
+          <Badge
+            variant="outline"
+            className="rounded-full border-purple-200 bg-purple-50 px-3 py-1 font-medium text-purple-700"
+          >
+            {job.jobType}
+          </Badge>
+        )}
 
-        <Badge variant="outline" className="border-green-200 bg-green-50 text-green-700">
-          {job?.salary} LPA
-        </Badge>
+        {salary !== undefined && salary !== null && salary !== "" && (
+          <Badge
+            variant="outline"
+            className="rounded-full border-emerald-200 bg-emerald-50 px-3 py-1 font-medium text-emerald-700"
+          >
+            {salary} LPA
+          </Badge>
+        )}
       </div>
 
+      {/* Action */}
       <div className="mt-5 border-t border-gray-100 pt-4">
         <Button
           type="button"
           variant="outline"
-          className="w-full justify-between rounded-xl hover:border-purple-600 hover:bg-purple-600 hover:text-white"
+          className="w-full justify-between rounded-xl border-gray-200 bg-white py-5 font-semibold text-gray-800 transition-all duration-200 hover:border-purple-600 hover:bg-purple-600 hover:text-white"
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`/description/${job?._id}`);
+            openJob();
           }}
         >
           View Details
-          <ArrowUpRight size={16} />
+          <ArrowUpRight size={17} />
         </Button>
       </div>
-    </div>
+    </article>
   );
 };
 
