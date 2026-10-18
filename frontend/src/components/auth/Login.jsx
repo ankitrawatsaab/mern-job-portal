@@ -237,11 +237,11 @@ const Login = () => {
                             {loading ? (
                                 <>
                                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                    Signing you in...
+                                    Logging in...
                                 </>
                             ) : (
                                 <>
-                                    Sign In
+                                    Login
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </>
                             )}
