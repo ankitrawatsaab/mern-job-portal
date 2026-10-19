@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {Table,TableBody,TableCaption,TableCell,TableHead,TableHeader,TableRow} from '../ui/table'
 import {Popover,PopoverContent,PopoverTrigger} from '../ui/popover'
-import {Eye,MoreHorizontal,BriefcaseBusiness,CalendarDays,FileSearch,Trash2,} from 'lucide-react'
+import {Eye,MoreHorizontal,BriefcaseBusiness,CalendarDays,FileSearch,Trash2,Loader2} from 'lucide-react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import axios from "axios";
@@ -13,12 +13,15 @@ import { setAllAdminJobs } from "@/redux/jobSlice";
 const AdminJobsTable = () => {
     const navigate = useNavigate()
 
+    const [deletingJobId, setDeletingJobId] = useState(null);
+
     const { allAdminJobs, searchJobByText } = useSelector((state) => state.job)
 
     const dispatch = useDispatch();
 
     const handleDeleteJob = async (jobId) => {
         try {
+            setDeletingJobId(jobId);
             const res = await axios.delete(
              `${JOB_API_END_POINT}/delete/${jobId}`,
                 { withCredentials: true }
@@ -35,7 +38,7 @@ const AdminJobsTable = () => {
             } catch (error) {
                 toast.error(
                 error.response?.data?.message || "Failed to delete job"
-            );
+            ) finally
         }
     };
 
