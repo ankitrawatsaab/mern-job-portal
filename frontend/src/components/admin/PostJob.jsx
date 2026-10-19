@@ -4,103 +4,61 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useSelector } from 'react-redux';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../ui/select';
-import {
-  Loader2,
-  BriefcaseBusiness,
-  Building2,
-  MapPin,
-  IndianRupee,
-  Users,
-  Layers3,
-  FileText,
-} from 'lucide-react';
+import {Select,SelectContent,SelectGroup,SelectItem,SelectTrigger,SelectValue,} from '../ui/select';
+import {Loader2,BriefcaseBusiness,Building2,MapPin,IndianRupee,Users,Layers3,FileText,} from 'lucide-react';
 import { JOB_API_END_POINT } from '@/utils/constant';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const companyArray = [];
+
 const PostJob = () => {
-  const [input, setInput] = useState({
-    title: '',
-    description: '',
-    requirements: '',
-    salary: '',
-    location: '',
-    jobType: '',
-    experience: '',
-    position: 0,
-    companyId: '',
-  });
+    const [input, setInput] = useState({
+        title: '',
+        description: '',
+        requirements: '',
+        salary: '',
+        location: '',
+        jobType: '',
+        experience: '',
+        position: 0,
+        companyId: '',
+    });
 
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { companies } = useSelector((store) => store.company);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-  const changeEventHandler = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value });
+    const { companies } = useSelector((store) => store.company);
+    const changeEventHandler = (e) => {
+        setInput({ ...input, [e.target.name]: e.target.value });
+    };
+
+    const selectChangeHandler = (value) => {
+    const selectedCompany = companies.find((company)=> company.name.toLowerCase() === value);
+    setInput({...input, companyId:selectedCompany._id});
   };
 
-  const selectChangeHandler = (value) => {
-    const selectedCompany = companies.find(
-      (company) => company.name.toLowerCase() === value
-    );
-
-    if (selectedCompany) {
-      setInput({ ...input, companyId: selectedCompany._id });
-    }
-  };
-
-  const submitHandler = async (e) => {
-    e.preventDefault();
-
-    try {
-      setLoading(true);
-
-      const payload = {
-        ...input,
-        experience: Number(input.experience),
-        position: Number(input.position),
-        requirements:
-          typeof input.requirements === 'string'
-            ? input.requirements
-                .split(',')
-                .map((skill) => skill.trim())
-                .filter(Boolean)
-            : input.requirements,
-      };
-
-      const res = await axios.post(
-        `${JOB_API_END_POINT}/post`,
-        payload,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        try {
+            setLoading(true);
+            const res = await axios.post(`${JOB_API_END_POINT}/post`, input,{
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                withCredentials:true
+            });
+            if(res.data.success){
+                toast.success(res.data.message);
+                navigate("/admin/jobs");
+            }
+        } catch (error) {
+            toast.error(error.response.data.message);
+        } finally{
+            setLoading(false);
         }
-      );
-
-      if (res.data.success) {
-        toast.success(res.data.message);
-        navigate('/admin/jobs');
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(
-        error.response?.data?.message || 'Something went wrong'
-      );
-    } finally {
-      setLoading(false);
     }
-  };
 
   const fieldClass =
     'mt-1.5 h-11 rounded-xl border-gray-200 bg-white shadow-sm transition-colors placeholder:text-gray-400 focus-visible:border-purple-400 focus-visible:ring-2 focus-visible:ring-purple-100';
