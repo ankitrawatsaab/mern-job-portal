@@ -35,13 +35,14 @@ const AdminJobsTable = () => {
                 dispatch(setAllAdminJobs(updatedJobs));
                 toast.success(res.data.message);
             }
-            } catch (error) {
-                toast.error(
-                error.response?.data?.message || "Failed to delete job"
-            ) finally
-        }
-    };
 
+            } catch (error) {
+                toast.error(error.response?.data?.message || "Failed to delete job")
+            } finally {
+                setDeletingJobId(null)
+            }
+        };
+    }
     const [filterJobs, setFilterJobs] = useState(allAdminJobs || [])
 
     useEffect(() => {
@@ -163,11 +164,21 @@ const AdminJobsTable = () => {
                                         <PopoverContent align="end" className="w-44 rounded-xl p-2">
                                             <button
                                                 type="button"
+                                                disabled={deletingJobId === job._id}
                                                 onClick={() => handleDeleteJob(job._id)}
-                                                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-red-600 transition hover:bg-red-50 hover:text-red-700"
+                                                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-red-600 transition hover:bg-red-50 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-60"
                                             >
-                                                <Trash2 className="h-4 w-4" />
-                                                Delete Job
+                                                {deletingJobId === job._id ? (
+                                                <>
+                                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                                    Deleting...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Trash2 className="h-4 w-4" />
+                                                    Delete Job
+                                                </>
+                                            )}
                                             </button>
 
                                             <button
@@ -209,6 +220,4 @@ const AdminJobsTable = () => {
             </Table>
         </div>
     )
-}
-
 export default AdminJobsTable
