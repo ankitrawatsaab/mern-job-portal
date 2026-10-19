@@ -101,3 +101,36 @@ export const getAdminJobs = async (req, res) => {
         console.log(error);
     }
 }
+
+// Admin job delete karega
+export const deleteJob = async (req, res) => {
+    try {
+        const jobId = req.params.id;
+        const adminId = req.id;
+
+        const job = await Job.findOne({
+            _id: jobId,
+            created_by: adminId
+        });
+
+        if (!job) {
+            return res.status(404).json({
+                message: "Job not found or unauthorized.",
+                success: false
+            });
+        }
+
+        await Job.findByIdAndDelete(jobId);
+
+        return res.status(200).json({
+            message: "Job deleted successfully.",
+            success: true
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Failed to delete job.",
+            success: false
+        });
+    }
+};

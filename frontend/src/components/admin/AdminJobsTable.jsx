@@ -1,36 +1,43 @@
-
 import React, { useEffect, useState } from 'react'
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '../ui/table'
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '../ui/popover'
-import {
-    Edit2,
-    Eye,
-    MoreHorizontal,
-    BriefcaseBusiness,
-    CalendarDays,
-    FileSearch,
-} from 'lucide-react'
+import {Table,TableBody,TableCaption,TableCell,TableHead,TableHeader,TableRow} from '../ui/table'
+import {Popover,PopoverContent,PopoverTrigger} from '../ui/popover'
+import {Eye,MoreHorizontal,BriefcaseBusiness,CalendarDays,FileSearch,Trash2,} from 'lucide-react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import axios from "axios";
+import { toast } from "sonner";
+import { JOB_API_END_POINT } from "@/utils/constant";
+import { useDispatch } from "react-redux";
+import { setAllAdminJobs } from "@/redux/jobSlice";
 
 const AdminJobsTable = () => {
     const navigate = useNavigate()
 
-    const { allAdminJobs, searchJobByText } = useSelector(
-        (state) => state.job
-    )
+    const { allAdminJobs, searchJobByText } = useSelector((state) => state.job)
+
+    const dispatch = useDispatch();
+
+    const handleDeleteJob = async (jobId) => {
+        try {
+            const res = await axios.delete(
+             `${JOB_API_END_POINT}/delete/${jobId}`,
+                { withCredentials: true }
+            );
+
+            if (res.data.success) {
+                const updatedJobs = allAdminJobs.filter(
+                    (job) => job._id !== jobId
+                );
+
+                dispatch(setAllAdminJobs(updatedJobs));
+                toast.success(res.data.message);
+            }
+            } catch (error) {
+                toast.error(
+                error.response?.data?.message || "Failed to delete job"
+            );
+        }
+    };
 
     const [filterJobs, setFilterJobs] = useState(allAdminJobs || [])
 
@@ -153,13 +160,11 @@ const AdminJobsTable = () => {
                                         <PopoverContent align="end" className="w-44 rounded-xl p-2">
                                             <button
                                                 type="button"
-                                                onClick={() =>
-                                                    navigate(`/admin/companies/${job._id}`)
-                                                }
-                                                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-gray-700 transition hover:bg-purple-50 hover:text-purple-700"
+                                                onClick={() => handleDeleteJob(job._id)}
+                                                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-red-600 transition hover:bg-red-50 hover:text-red-700"
                                             >
-                                                <Edit2 className="h-4 w-4" />
-                                                Edit Job
+                                                <Trash2 className="h-4 w-4" />
+                                                Delete Job
                                             </button>
 
                                             <button
