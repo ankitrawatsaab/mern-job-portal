@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import {Table,TableBody,TableCaption,TableCell,TableHead,TableHeader,TableRow} from '../ui/table'
-import {Popover,PopoverContent,PopoverTrigger} from '../ui/popover'
-import {Eye,MoreHorizontal,BriefcaseBusiness,CalendarDays,FileSearch,Trash2,Loader2} from 'lucide-react'
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { Eye, MoreHorizontal, BriefcaseBusiness, CalendarDays, FileSearch, Trash2, Loader2 } from 'lucide-react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import axios from "axios";
@@ -23,7 +23,7 @@ const AdminJobsTable = () => {
         try {
             setDeletingJobId(jobId);
             const res = await axios.delete(
-             `${JOB_API_END_POINT}/delete/${jobId}`,
+                `${JOB_API_END_POINT}/delete/${jobId}`,
                 { withCredentials: true }
             );
 
@@ -35,14 +35,13 @@ const AdminJobsTable = () => {
                 dispatch(setAllAdminJobs(updatedJobs));
                 toast.success(res.data.message);
             }
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Failed to delete job")
+        } finally {
+            setDeletingJobId(null)
+        }
+    };
 
-            } catch (error) {
-                toast.error(error.response?.data?.message || "Failed to delete job")
-            } finally {
-                setDeletingJobId(null)
-            }
-        };
-    }
     const [filterJobs, setFilterJobs] = useState(allAdminJobs || [])
 
     useEffect(() => {
@@ -169,16 +168,16 @@ const AdminJobsTable = () => {
                                                 className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-red-600 transition hover:bg-red-50 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-60"
                                             >
                                                 {deletingJobId === job._id ? (
-                                                <>
-                                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                                    Deleting...
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Trash2 className="h-4 w-4" />
-                                                    Delete Job
-                                                </>
-                                            )}
+                                                    <>
+                                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                                        Deleting...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Trash2 className="h-4 w-4" />
+                                                        Delete Job
+                                                    </>
+                                                )}
                                             </button>
 
                                             <button
@@ -219,5 +218,6 @@ const AdminJobsTable = () => {
                 </TableBody>
             </Table>
         </div>
-    )
-export default AdminJobsTable
+    );
+}
+export default AdminJobsTable 
